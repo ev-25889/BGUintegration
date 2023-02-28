@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:xs="http://www.w3.org/2001/XMLSchema"
-             xmlns:tns="http://localhost/"
+             xmlns:tns="http://<...>"
              name="BguWsdl"
              xmlns="http://schemas.xmlsoap.org/wsdl/">
     <types>
         <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-            <xs:element name="EduProgramUID">
-                    <xs:element name="GUID"
-                            type="xs:string"/>
-            </xs:element>
             <xs:complexType name="EduProgramType">
                 <xs:sequence>
                     <xs:element name="Code"
@@ -26,13 +22,13 @@
                             type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="EduProgramCost">
+            <xs:complexType name="CostType">
                 <xs:sequence>
                     <xs:element name="Cost"
                             type="xs:decimal"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="ContractNumber">
+            <xs:complexType name="ContractNumberType">
                 <xs:sequence>
                     <xs:element name="StudentUID"
                             type="xs:string"/>
@@ -42,7 +38,7 @@
                             type="xs:date"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="Payment">
+            <xs:complexType name="PaymentType">
                 <xs:sequence>
                     <xs:element name="PaymentFact"
                             type="xs:boolean"/>
@@ -52,20 +48,7 @@
                             type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:element name="Response">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="return"
-                                    type="xs:string"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-            <xs:complexType name="StudentUID">
-                <xs:sequence>
-                    <xs:element name="GUID"
-                            type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
+
             <xs:complexType name="StudentType">
                     <xs:sequence>
                         <xs:element name="Surname"
@@ -104,7 +87,15 @@
                                 type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
-            <xs:complexType name="StudentRequest">
+            <xs:complexType name="FacultyType">
+				<xs:sequence>
+					<xs:element name="Code"
+							type="xs:string"/>
+					<xs:element name="Name"
+							type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+            <xs:complexType name="StudentRequestType">
                     <xs:sequence>
                         <xs:element name="student"
                                 type="StudentType"/>
@@ -127,12 +118,55 @@
                                 minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
-            <xs:complexType name="ListCosts">
-                <xs:sequence>
-                    <xs:element name="Cost"
-                            type="xs:decimal"/>
-                </xs:sequence>
+
+            <xs:complexType name="EmptyType">
+               <xs:attribute name="emptyAtr" type="xs:positiveInteger"/>
             </xs:complexType>
+
+            <xs:element name="EduProgramUID">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="GUID"
+                            type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Response">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="return"
+                                    type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            <xs:element name="EduProgram"
+                        type="tns:EduProgramType"/>
+            <xs:element name="Cost"
+                        type="tns:CostType"/>
+            <xs:element name="ContractNumber"
+                        type="tns:ContractNumberType"/>
+            <xs:element name="Payment"
+                        type="tns:PaymentType"/>
+            <xs:element name="StudentUID">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="GUID"
+                            type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="StudentRequest"
+                        type="tns:StudentRequestType"/>
+            <xs:element name="EduPrograms"
+                        type="tns:EduProgramType"
+                        maxOccurs="unbounded"/>
+            <xs:element name="Costs"
+                        type="tns:CostType"
+                        maxOccurs="unbounded"/>
+            <xs:element name="EduProgramObject"
+                        type="tns:EmptyType"/>
+            <xs:element name="CostObject"
+                        type="tns:EmptyType"/>
         </xs:schema>
     </types>
 
@@ -147,11 +181,11 @@
 
     <message name="GetCostByEduProgramRequestMessage">
         <part name="parameters"
-                    element="tns:EduProgramID"/>
+                    element="tns:EduProgramUID"/>
     </message>
     <message name="GetCostByEduProgramResponseMessage">
         <part name="parameters"
-                    element="tns:EduProgramCost"/>
+                    element="tns:Cost"/>
     </message>
 
     <message name="PostContractNumberRequestMessage">
@@ -183,23 +217,23 @@
 
     <message name="SyncEduProgramRequestMessage">
         <part name="parameters"
-                    element=""/>
+                    element="tns:EduProgramObject"/>
     </message>
     <message name="SyncEduProgramResponseMessage">
         <part name="parameters"
-                    element=""/>
+                    element="tns:EduPrograms"/>
     </message>
 
     <message name="SyncCostRequestMessage">
         <part name="parameters"
-                    element=""/>
+                    element="CostObject"/>
     </message>
     <message name="SyncCostResponseMessage">
         <part name="parameters"
-                    element="tns:ListCosts"/>
+                    element="tns:Costs"/>
     </message>
 
-    <!-- Привязка процедуры к сообщениям -->
+
     <portType name="BguServicePortType">
         <operation name="GetEduProgramByID">
             <input message="tns:GetEduProgramByIDRequestMessage"/>
@@ -222,7 +256,7 @@
             <output message="tns:GetStudentByIDResponseMessage"/>
         </operation>
     </portType>
-     <!--Формат процедур веб-сервиса.  указано, что будут использоваться стандартные SOAP-конверты.-->
+
     <binding name="BguServiceBinding" type="tns:BguServicePortType">
         <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />   <!-- rpc поверх http -->
         <operation name="GetEduProgramByID">
@@ -235,7 +269,7 @@
             </output>
         </operation>
     </binding>
-     <!--Определение сервиса, точки входа -->
+
     <service name="BguService">
         <port name="BguServicePort" binding="tns:BguServiceBinding">
             <soap:address location="http://localhost:00/<...>.py" /> <!-- ссылка на обработчик, принимающий запросы -->
