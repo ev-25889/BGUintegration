@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions>
+    <types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:complexType name="EduProgramUID">
+                <xs:sequence>
+                    <xs:element name="GUID"
+                            type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="EduProgram">
+                <xs:sequence>
+                    <xs:element name="Code"
+                            type="xs:string"/>
+                    <xs:element name="ProgramUID"
+                            type="xs:string"/>
+                    <xs:element name="Name"
+                            type="xs:string"/>
+                    <xs:element name="Hours"
+                            type="xs:string"/>
+                    <xs:element name="StartDate"
+                            type="xs:string"/>
+                    <xs:element name="EndDate"
+                            type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="EduProgramCost">
+                <xs:sequence>
+                    <xs:element name="Cost"
+                            type="xs:decimal"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ContractNumber">
+                <xs:sequence>
+                    <xs:element name="StudentUID"
+                            type="xs:string"/>
+                    <xs:element name="ContractNumber"
+                            type="xs:string"/>
+                    <xs:element name="ContractStartDate"
+                            type="xs:date"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Payment">
+                <xs:sequence>
+                    <xs:element name="PaymentFact"
+                            type="xs:boolean"/>
+                    <xs:element name="ContractNumber"
+                            type="xs:string"/>
+                    <xs:element name="StudentUID"
+                            type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="Response">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="return"
+                                    type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            <xs:complexType name="StudentUID">
+                <xs:sequence>
+                    <xs:element name="GUID"
+                            type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Student">
+                    <xs:sequence>
+                        <xs:element name="Surname"
+                                type="xs:string"/>
+                        <xs:element name="Name"
+                                type="xs:string"/>
+                        <xs:element name="MiddleName"
+                                type="xs:string"/>
+                        <xs:element name="PassportNumber"
+                                type="xs:string"/>
+                        <xs:element name="PassportSeries"
+                                type="xs:string"/>
+                        <xs:element name="PassportIssuedByWhom"
+                                type="xs:string"/>
+                        <xs:element name="PassportDateOfIssue"
+                                type="xs:date"/>
+                        <xs:element name="DepositPassport"
+                                type="xs:string"/>
+                        <xs:element name="DepartmentPassportUID"
+                                type="xs:string"/>
+                        <xs:element name="DateOfBirth"
+                                type="xs:date"/>
+                        <xs:element name="Gender"
+                                type="xs:string"/>
+                        <xs:element name="CountryOfRegistration"
+                                type="xs:int"/>
+                        <xs:element name="SNILS"
+                                type="xs:string"/>
+                        <xs:element name="Address"
+                                type="xs:string"/>
+                        <xs:element name="ContactPhoneNumber"
+                                type="xs:string"/>
+                        <xs:element name="Email"
+                                type="xs:string"/>
+                        <xs:element name="StudentUID"
+                                type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            <xs:complexType name="StudentRequest">
+                    <xs:sequence>
+                        <xs:element name="Student"
+                                type="tns:Student"/>
+                        <xs:element name="Faculty"
+                                type="tns:Faculty"
+                                minOccurs="0"/>
+                        <xs:element name="Program"
+                                type="tns:Program"/>
+                        <xs:element name="GroupUID"
+                                type="xs:string"/>
+                        <xs:element name="DurationAttribute"
+                                type="xs:boolean"/>
+                        <xs:element name="Course"
+                                type="tns:Course"
+                                maxOccurs="2"
+                                minOccurs="0"/>
+                        <xs:element name="FormOfTraining"
+                                type="tns:FormOfTraining"
+                                minOccurs="0"/>
+                        <xs:element name="SourceOfFinancialSupport"
+                                type="tns:SourceOfFinancialSupport"
+                                minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+        </xs:schema>
+    </types>
+    <message name="GetEduProgramByIDRequestMessage">
+        <part name="parameters"
+                    element="tns:EduProgramUID"/>
+    </message>
+    <message name="GetEduProgramByIDResponseMessage">
+        <part name="parameters"
+                    element="tns:EduProgram"/>
+    </message>
+    <message name="GetCostByEduProgramRequestMessage">
+        <part name="parameters"
+                    element="tns:EduProgramID"/>
+    </message>
+    <message name="GetCostByEduProgramResponseMessage">
+        <part name="parameters"
+                    element="tns:EduProgramCost"/>
+    </message>
+    <message name="PostContractNumberRequestMessage">
+        <part name="parameters"
+                    element="tns:ContractNumber"/>
+    </message>
+    <message name="PostContractNumberResponseMessage">
+        <part name="parameters"
+                    element="tns:Response"/>
+    </message>
+    <message name="PostPaymentRequestMessage">
+        <part name="parameters"
+                    element="tns:Payment"/>
+    </message>
+    <message name="PostPaymentResponseMessage">
+        <part name="parameters"
+                    element="tns:Response"/>
+    </message>
+
+    <message name="GetStudentByIDRequestMessage">
+        <part name="parameters"
+                    element="tns:StudentUID"/>
+    </message>
+    <message name="GetStudentByIDResponseMessage">
+        <part name="parameters"
+                    element="tns:StudentRequest"/>
+    </message>
+    <message name="RequestMessage">
+        <part name="parameters"
+                    element="tns:"/>
+    </message>
+    <message name="ResponseMessage">
+        <part name="parameters"
+                    element="tns:"/>
+    </message>
+    <!-- Привязка процедуры к сообщениям -->
+    <portType name=" ">
+        <operation name="GetEduProgramByID">
+            <input message="tns:GetEduProgramByIDRequestMessage"/>
+            <output message="tns:GetEduProgramByIDResponseMessage"/>
+        </operation>
+        <operation name="GetCostByEduProgram">
+            <input message="tns:GetCostByEduProgramRequestMessage"/>
+            <output message="tns:GetCostByEduProgramResponseMessage"/>
+        </operation>
+        <operation name="PostContractNumber">
+            <input message="tns:PostContractNumberRequestMessage"/>
+            <output message="tns:PostContractnumberResponseMessage"/>
+        </operation>
+        <operation name="PostPayment">
+            <input message="tns:PostPaymentRequestMessage"/>
+            <output message="tns:PostPaymentResponseMessage"/>
+        </operation>
+        <operation name="GetStudentByID">
+            <input message="tns:GetStudentByIDRequestMessage"/>
+            <output message="tns:GetStudentByIDResponseMessage"/>
+        </operation>
+    </portType>
+     <!--Формат процедур веб-сервиса  В данном случае указано, что будут использоваться стандартные SOAP-конверты.-->
+    <binding name="BguServiceBinding" type="tns:BguServicePortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />   <!-- rpc поверх http -->
+        <operation name="GetEduProgramByID">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+    </binding>
+     <!--Определение сервиса, точки входа -->
+    <service name="BguService">
+        <port name="BguServicePort" binding="tns:BguServiceBinding">
+            <soap:address location="http://localhost:00/<...>.py" /> <!-- ссылка на обработчик, принимающий запросы -->
+        </port>
+    </service>
+</definitions>
